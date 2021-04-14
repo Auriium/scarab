@@ -4,3 +4,5 @@ It's main interpreter is the BehaviorInterpreter and the main Centralizer is a s
 
 Centralizer: Something shared between nodes
 Interpreter: Something that can perform actions with regards to all centralizers and the node's context.
+
+BranchingInterpreters cannot have results
