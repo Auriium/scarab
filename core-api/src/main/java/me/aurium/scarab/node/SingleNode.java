@@ -1,22 +1,25 @@
 package me.aurium.scarab.node;
 
+import me.aurium.scarab.behavioir.EventContext;
 import me.aurium.scarab.behavioir.EventModifier;
 import me.aurium.scarab.model.interpretation.NodeModifier;
 
 import java.util.Set;
 
-public class NodeTest implements ScarabNode{
+public class SingleNode implements ScarabNode{
 
-    private final NodeTest childNode;
     private final EventModifier modifier;
 
-    public NodeTest(NodeTest childNode, EventModifier modifier) {
-        this.childNode = childNode;
+    public SingleNode(EventModifier modifier) {
         this.modifier = modifier;
     }
 
     @Override
     public Set<NodeModifier<?>> allModifiers() {
         return null;
+    }
+
+    public EventContext modify(EventContext context) {
+        return modifier.modify(context);
     }
 }

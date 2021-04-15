@@ -11,7 +11,6 @@ public class AbstractEvent implements Event {
         this.map = map;
     }
 
-    @Override
     public StatMap getStats() {
         return map;
     }
