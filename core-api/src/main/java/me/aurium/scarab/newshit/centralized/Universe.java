@@ -1,8 +1,23 @@
 package me.aurium.scarab.newshit.centralized;
 
-import me.aurium.scarab.newshit.ItemNode;
+import me.aurium.scarab.newshit.Node;
+import me.aurium.scarab.newshit.system.UniverseSystem;
 
 public interface Universe {
 
-    void pulseSystems(ItemNode node);
+    /**
+     * Pulses all simple systems using the specified node
+     * @param node the node
+     */
+    void pulseSimple(Node node);
+
+    /**
+     * Pulses a specific system using
+     * @param node
+     * @param system
+     * @param input
+     * @param <C>
+     * @param <T>
+     */
+    <C,T extends UniverseSystem<C>> void pulseSpecific(Node node, Class<T> system, C input);
 }

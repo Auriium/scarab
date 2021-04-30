@@ -1,9 +1,9 @@
 package me.aurium.scarab.newshit.system;
 
-import me.aurium.scarab.newshit.Node;
+public interface SimpleSystem extends UniverseSystem<Void> {
 
-public interface SimpleSystem {
-
-    void consume(Node node);
-
+    @Override
+    default boolean isSimple() {
+        return true;
+    }
 }
