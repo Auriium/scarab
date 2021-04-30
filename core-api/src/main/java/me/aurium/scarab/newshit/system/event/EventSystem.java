@@ -3,6 +3,8 @@ package me.aurium.scarab.newshit.system.event;
 import me.aurium.scarab.newshit.AspectData;
 import me.aurium.scarab.newshit.BasicSystem;
 import me.aurium.scarab.newshit.Node;
+import me.aurium.scarab.newshit.centralized.SystemProvider;
+import me.aurium.scarab.newshit.system.condition.SystemCondition;
 
 import java.util.Set;
 
@@ -15,14 +17,14 @@ public class EventSystem<T extends AspectData> implements BasicSystem<Event> {
     private final Class<T> aspectClass;
     private final ListenerCollection<T> listeners;
 
-    protected EventSystem(Class<T> aspectClass, ListenerCollection<T> listeners) {
+    EventSystem(Class<T> aspectClass, ListenerCollection<T> listeners) {
         this.aspectClass = aspectClass;
         this.listeners = listeners;
     }
 
     @Override
-    public Set<Class<? extends AspectData>> acceptedComponents() {
-        return Set.of(aspectClass);
+    public SystemCondition acceptedComponents() {
+        return null;
     }
 
     @Override
@@ -33,4 +35,6 @@ public class EventSystem<T extends AspectData> implements BasicSystem<Event> {
             }
         });
     }
+
+
 }

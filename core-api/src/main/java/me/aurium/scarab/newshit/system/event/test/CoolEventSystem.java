@@ -1,33 +1,28 @@
 package me.aurium.scarab.newshit.system.event.test;
 
 import me.aurium.scarab.newshit.AspectData;
+import me.aurium.scarab.newshit.BasicSystem;
+import me.aurium.scarab.newshit.centralized.SystemProvider;
+import me.aurium.scarab.newshit.system.event.Event;
 import me.aurium.scarab.newshit.system.event.EventSystem;
 import me.aurium.scarab.newshit.system.event.EventSystemInitializer;
 import me.aurium.scarab.newshit.system.event.ListenerCollection;
 
-public class CoolEventSystem extends EventSystemInitializer<CoolAspect> {
-
-    protected CoolEventSystem() {
-        super(CoolAspect.class);
-    }
+public class CoolEventSystem implements SystemProvider {
 
     @Override
-    public ListenerCollection<CoolAspect> getCollection(ListenerCollection<CoolAspect> collection) {
-        collection.registerEvent(CoolEvent.class,)
-
-        return collection;
+    public BasicSystem<?> produceSystem() {
+        return new EventSystemInitializer<>(CoolAspect.class)
+                .withListener(CoolEvent.class, this::onCoolEvent,1)
+                .withListener(Event.class, this::onBaseEvent, 1)
+                .produceSystem();
     }
 
-    public static class cum extends EventSystem<CoolAspect> {
+    public void onCoolEvent(CoolAspect aspect, CoolEvent event) {
 
-        protected cum() {
-            super(CoolAspect.class, new ListenerCollection<CoolAspect>()
-                    .registerEvent(CoolEvent.class,cum::eat,1)
-            );
-        }
+    }
 
-        public static void eat(CoolAspect aspect, CoolEvent event) {
+    public void onBaseEvent(CoolAspect aspect, Event event) {
 
-        }
     }
 }
