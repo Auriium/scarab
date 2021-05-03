@@ -1,8 +1,14 @@
-Scarab is a BION (**B**u**i**ld Your **O**wn **Node** system) (I totally didn't butcher that)
+Scarab is a retarded ECS that is slightly better than artemis
 
-It's main interpreter is the BehaviorInterpreter and the main Centralizer is a stat map. However, Scarab supports creation of whatever nodes you want. I don't know why this system exists.
+The walkStrategy determines how nodes are read and behaviors are fired.
 
-Centralizer: Something shared between nodes
-Interpreter: Something that can perform actions with regards to all centralizers and the node's context.
+TODO: eventsystem: EventIdentifier / EventRule that can determine whether a system is fired based on
 
-BranchingInterpreters cannot have results
+if we have an aspect of type y and...
+
+a. if an aspect of type x is found on the same node
+b. if an aspect of type x is found on the same node or any child nodes
+c. if an aspect of type x is not found on the same node
+d. if an aspect of type x is not found on the same node or any child nodes
+
+This needs to also be usable for a BasicSystem implementation as well.
