@@ -1,0 +1,191 @@
+at their most simple, aspects (or depending on the person, aspectData) are a set of intrinsic data required to perform a behavior.
+ Whether or not they should be a set of intrinsic data required to modify ""statistics"", or actual instances of the data, is unknown yet.
+ 
+ //questions
+ 
+ Do we want to separate modification and accessing
+ 
+ I think modification and accessing need to be separate, but modifying needs to be as flexible as accessing.
+ 
+ accessing has to do with defaults
+ 
+ modifying has to do with things like 0, then (x0.5) (think of what is in your head, aurium)
+ 
+ maybe a separate collection of ""modifiers"" that are somehow linked to the aspects of the node, and the aspects, { (or raw stats + defaults of) -> what an aspect is }
+ 
+ ASPECTS AND MODIFICATIONS!!!!!!
+ 
+ aspects are different from
+ 
+ there is a new concept, and aspects have changed in concept
+ the aspect is simply a data that is bound to the object
+ 
+ we need some new ideas
+ 
+ the base, which has GLOBAL ASPECTS, or now known as FACETS
+ the FACETS are affected by modifiers and are passed throughout the node and its tree. new ones can be added to a node at any time,...???
+ 
+ oik
+ 
+ some doubts about the new ideas
+ (from line 82ish) I just relaised, cloud framework SHITTERS have their cool epic brain big paper like docteret from the french dude, 
+ we have this autistic (not an insult) blurb paper here which is just condensced aurium autism in a paper that describes the planing an though process
+ as our paper that the framework is based onn
+ 
+ its a code diary of a sort
+ 
+ 
+ ASPECTS are now simply object only data.
+ 
+ Somehow, aspects affecting the facets???? im not sure
+ 
+ Simply put however these need to be separated out into two separate things
+ 
+ Since, if aspects are simply accessors to a global map of data, you cannot have two aspects on the same object
+ since if they both have a value, "cum", you will be sharing them.
+ 
+ However, if you want to have data that is passed up the tree, then we need some kind of way of telling.
+ 
+ 
+ ALTERNATE IDEA THAT MAY BE BAD - The Aspect and Facet condensed into one object with two things in it, or rather, 
+ an aspect can now have Globals, which when added are unique to the entire node base, and a Local, which is something that is only to this current node.
+ Modifiers can only affect Globals.
+ 
+ HOW DO WE MAINTAIN GUARUNTEES OF THE EXISTENCE AND PRESENCE OF GLOBALS????????
+ 
+ Globals are tricky and scary and bad
+ 
+ Maybe
+ 
+ So we have two ideas, one, the separation of facets and aspects, which is a bit abstract and im not sure about the success of it, but maybe it can be good. 
+ (cant find any issues right now with my shit piss monke brain, but also it is too abstract for finding issues right now)
+ 
+ However, second is the idea of the combined facet + aspect, which already has a glaring issue, which is how we maintain the existence and presence of globals.
+ We cannot have large inheritance trees with globals:::::::: WAIT
+ 
+ actually, we may be able to
+ 
+ GLOBALS
+ 
+ 
+ aspect "gunBase"
+ - local "name"
+ - global "damage"
+ - global "recoil"
+ 
+ branches into
+ 
+ aspect "gamerGrip" extends gunBase    and     aspect "scope" extends gunBase
+ - local "size"                                     - (writes) global "scope_distance"
+ - local "name"                                     - local 
+ (inherits) -global "recoil"
+ 
+ when writing a system with access to gamerGrip, you now have access to the "recoi" value since it is inherited from gunBase. however, there is an issue - this model here, i dont know why
+ i made it since it doesnt offer a good example
+
+g
+
+i was thinking a global of ""recoil"" would belong to gamerGrip, but it would actually belong to gunBase since gunBase's linked system is what uses recoilBase.
+
+as you can see the gamer grip has it's locals, and inherits
+ 
+ so, we have our gunbase with 
+ 
+ -INTERUPT YOU TO BRING
+ 
+ i thinkin that the classes no longer have useful names: it would be just as good to name the aspect Peronker and the facet Tallelui than what they currently are named, because
+ right now the names mean nothing
+ 
+ all of this i just realized reveals that instead of just having aspects and facets, we need some sort of way of keeping track of public and private (equivalent) data
+ 
+ 
+ i just realized again, that there is no "local" data, or maybe we just want private data - all data should be unique, there will not be a single giant node base but stats are unique to themselves
+ 
+ however, the children modify their parents
+ 
+ so if we have
+ 
+ gunBase () BRANCHES INTO
+        /       \
+  talentBase A  talentBase B
+	
+both talentbases get the gunBases' stats ""locals"", but each talent base has it's own stat tree from there
+ - if talentBase has a stat called "cum", talentBase A's "cum" should be able to be different from talentBase B's "cum"
+ 
+ however, any node that branches off of talentBase A should inherit it's cum.
+ 
+ ISSUE ARISES
+ 
+ what if the a node is trying to inject a local that already shares an identifier with another local?
+ 
+ 
+ AN IDEA AN IDEA
+ 
+ Okay, so to realize our concept into code, it is necessary to separate aspects and facets. This is sad, but a reality.
+ 
+ Components consist of aspects and facets
+ Systems subscribe to components and do behavior
+ EventSystems are a type of System that subscribe to events and accept a specific type of component
+ 
+ Node maybe has to be it's own things
+ 
+ NodeBind is the aspect and facet pair
+ Component is a set of slots(?)
+ 
+ maybe not
+ we need the ability for facet/aspects and components in general to be loaded not just from a config but from a builder, or maybe a definition of sorts? (maybe even the ability to implement ourselves)
+ 
+ 
+ 
+ We need to detail out the different variants of components in order to meet all feature calibre has to offer and fucking crush them under an iron boot.
+ 
+ Component - something with an aspect and a facet, that can store data
+ 
+ Slot - something that holds a component
+ 
+ Component has two major derivatives which are SlottableComponent, a component that can have slots, and SlotlessComponent which does not have slots
+ 
+ Both types of component can show all attached components.
+ Only a slottablecomponent can show off the slots it has as well
+ 
+ Derivatives of SlottableComponent are PredefinedComponent and CompositionComponent.
+ The PredefinedComponent has it's slots written in code and therefore can also provide them with access to systems subscribing to it.
+ The CompositionComponent is similar to calibre-current's concept of a """"component and therefore cannot provide type safe descriptions of what components and what slots it holds.
+ CompositionComponents are typically loaded from a config, similar to calibre or Rimworld's "thingDef?/def"
+ 
+ Derivatives of Slot are ActualSlot<T>, PotentialSlot<T> where T extends an unknown component, MultipleActualSlot<T extends ?>, and MultiplePotentialSlot<T> where T extends an unknown component.
+ 
+The whole framework needs to be designed in a way where all derivatives of Component are **interchangable** with eachother as long as sufficient required data is provided to them.
+
+Secretly, the framework will favor components in this order, SlotlessComponent (filled by constructor) -> PreDefined -> Composition 
+
+This is because slotless and predefined components can provide their child slots easily and thus system implementers know exactly what they are working with.
+
+All components are build with their parent in mind
+
+
+NEW SHITTERS
+
+so - 
+
+Slots can be either Fixed or Variable
+
+a fixed slot has a component of a specific type only stored in it. This is useful for PredefinedComponents where you know exactly what is defined into the 
+slot and the component is only being used to define or modify statistics.
+
+a variable slot holds a component of either a specific type with facet extending the component's facet type, or ANY component extending the expected facet type.
+These are subdivided again into "Bounded" and "Unbounded" variable slots. This is useful for making "attachments" with separate behavior - for instance
+a "TalentComponent" slot where TalentComponent has derivatives TriggerFingerComponent which adjusts RPM and CenterMassComponent which makes it do more damage on hit.
+
+--AN UNKNOWN DOUBT: Modifiers in general> to elaborate on later
+
+--AN UNKNOWN DOUBT: Why even have component slots that are bounded? Why not just make all slots unbounded and make ""bounding"" by component tags?
+--MORE DOUBT: The bounding system already serves as a tag system in a way but is enforced by code.
+-- MORE DOUBT: what if someone tries to implement or construct a component of type TalentComponent? This breaks our system (well, not really, it simply does nothing.)
+
+
+By the way, CompositionComponent and DefinedComponent need to be switched. From here on our they will have the opposing definitions.
+
+The CompositionComponent is made up of known slots and known components.
+The DefinedComponent is made up of unknown slots (exclusively variable unbounded slots) and does not know what components it currently holds.
+
