@@ -6,5 +6,4 @@ package me.aurium.scarab.experimental.makeup;
 public interface Facet {
 
 
-
 }

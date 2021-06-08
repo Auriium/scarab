@@ -189,3 +189,59 @@ By the way, CompositionComponent and DefinedComponent need to be switched. From 
 The CompositionComponent is made up of known slots and known components.
 The DefinedComponent is made up of unknown slots (exclusively variable unbounded slots) and does not know what components it currently holds.
 
+More decisions and discoveries have been mdade! the first big one of today is that i do not want to use dyamic proxies at all costs, unless
+Something i'm thinking of is instead a map of StatKey. Components will register StatKeys on COMPONENT initialization and on DEF initialiation
+the proposing statkeys will have functions inserted or accessed. This way we can still use native code but always provide guaruntees to what a
+stat-key will provide
+
+this will throw our previous design into chaos and death sadly
+
+NEW SHITTERS
+perhaps we should do like Branch Framework and design around annotations AND maps where annotation wraps map via a separate implementation of a common abstraction
+this in combination with the fact that a facet (from here out there is only facets, no aspects - in order to a. clean up the structure, we'll be able to ""private"" values and b.
+
+) i just remembered the OH NO of why we can't make everything a facet ugh - java is killing me here
+
+some terminology from rimworld that can proably be developed into an idea
+
+Def - a definition of stats provided by an object + inheritance
+DefInstance - a implementation of said def. needs to be constructable from code as well as from the supermap
+Stat - a function that can be conchanged from an intial value (like +1 or *1.2)
+StatInstance - an instance of a stat that can be changed
+
+I HAVE SOLVED THE PROBLEM (BY LOOKING AT RIMWORLD MORE - MY LOVE MY LOVE RIMWORLD CE) AND I HAVE DECIDED ON AN ANSWER (thought it is not a good one)
+abstract.
+
+
+fucking.
+
+
+defs.
+
+
+def defaults will not be defined in any java def interface. I'm talking shit like this:
+
+ITestFace ->
+int damage;
+int rpm;
+
+abstract TestFace (implementing testface def) ->
+int damage = +2: (default damage)
+
+
+SomeFace (implementing testface def) extending TestFace ->
+int rpm = +3: (implement rpm, inherit damage)
+
+(resulting testface is damage +2, rpm +3)
+
+DamagingFace (implementing testface def) extending TestFace ->
+int damage = x2.0
+int rpm = +3
+
+(resulting testface is damage +4, rpm +3)
+
+ChildFace
+
+
+new huge concept - js like requirement matching - a system can just subscribe to any component / facet that matches it's required fields
+this one is a bit weird though so i'm not sure how to feel yet
